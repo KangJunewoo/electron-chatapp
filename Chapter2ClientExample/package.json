@@ -8,11 +8,11 @@
     "start": "electron ."
   },
   "dependencies": {
-    "axios": "~0.18.0",
+    "axios": "~0.19.2",
     "babel-cli": "~6.26.0",
     "babel-preset-env": "~1.7.0",
-    "electron": "^2.0.5",
-    "socket.io-client": "~2.1.1"
+    "electron": "^8.2.1",
+    "socket.io-client": "~2.3.0"
   },
   "author": "kishe56@gmail.com",
   "license": "MIT"
