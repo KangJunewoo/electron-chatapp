@@ -3,4 +3,5 @@ extends layout
 block content
   h1= message
   h2= error.status
-  pre #{error.stack}
+  // 아래 코드를 활성화하면 에러 스택이 나오게 됨.
+  // pre #{error.stack}
