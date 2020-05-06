@@ -1,0 +1,17 @@
+==== ch2_server ====
+그전까진 몰랐던 꿀팁
+  'use strict'; 를 맨 앞에 쓰면 엄격 모드로 문법을 검사함.
+  postman으로 편하게 post요청 보낼 수 있음.
+
+app.js
+  morgan : 콘솔에 GET /index 200 찍어주는 미들웨어
+  app.use 부분은 순서가 중요. next()로 다음 미들웨어로 가도록 넘긴다.
+  에러의 경우엔
+    라우터에서 Error 객체를 생성해서 next(error)로 넘겨도 되고,
+    라우터에서 처리 못하면
+    404 not found 알아서 에러 만들어주고 마지막에 처리되게 한다.
+
+routes/users.js
+  에러 띄우고 싶다면 msg, status, 전달 3줄이면 된다.
+  id못찾음, pw다름, 로그인성공 구분
+

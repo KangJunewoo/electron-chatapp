@@ -17,22 +17,25 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// 여러 셋업들..
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 드디어 사용자가 정의한 부분들 사용!
 app.use('/', indexRouter);
 app.use(headerPrinter);
 app.use('/users', usersRouter);
 
-// catch 404 and forward to error handler
+// 여기까지 왔다면 100% 404에러다.
+// 여기부턴 에러를 만들어서라도 보낸다.
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// error handler : 넘어온 에러를 화면에 띄워주자~
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;

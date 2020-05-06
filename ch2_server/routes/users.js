@@ -8,7 +8,7 @@ router.post('/login', (req,res,next)=>{
   
   if(id !== 'hi'){
     const error = new Error('user not found');
-    error.status(404);
+    error.status = 404;
     return next(error);
     
     // 아래 방법은 에러처리 미들웨어를 사용하지 않는 코드.
@@ -16,7 +16,7 @@ router.post('/login', (req,res,next)=>{
 
   } else if(pw !== 'bye'){
     const error = new Error('invalid password');
-    error.status(401);
+    error.status = 401;
     return next(error);
   }
   
