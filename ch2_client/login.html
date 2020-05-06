@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!--보안문제로 넣어준 태그-->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="stylesheets/login.css">
+  <title>FirstExample.</title>
+</head>
+<body>
+  <div class="login-form-wrapper">
+    <p class="title">Sign In</p>
+    <div class="login-form">
+      <div class="input-wrapper" id="input-id-wrapper">
+        <p class="input-title"></p>
+        <input type="text" class="user-input" id="user-id-input" placeholder="Please Input your ID">
+      </div>
+      <div class="input-wrapper" id="input-pw-wrapper">
+        <p class="input-title"></p>
+        <input type="text" class="user-input" id="user-pw-input" placeholder="Please Input your PW">
+      </div>
+      <button class="display-button" id="button-SignIn">Sign In</button>
+      <button class="display-button" id="button-SignUp">Sign Up</button>
+    </div>
+  </div>
+</body>
+<script src='./webScripts/login.js'></script>
+</html>
