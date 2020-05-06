@@ -6,13 +6,13 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 //morgan은 console에 GET /뭐시기뭐시기 200 나타내주는 미들웨어.
 const logger = require('morgan');
-
+const io = require('socket.io')();
 const headerPrinter = require('./headerPrinter');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
-
+app.io = io;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -34,6 +34,24 @@ app.use('/users', usersRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+io.use((socket,next)=>{
+  const token = socket.handshake.query.token;
+  console.log(`token is ${token}`);
+  if(token !== 'bye'){
+    return next(new Error('Unauthorized'));
+  }
+  next();
+});
+io.on('connection', (socket)=>{
+  socket.on('hello', (message)=>{
+    console.log(message);
+  });
+  socket.on('disconnect',(err)=>{
+    console.log(err);
+  });
+});
+
 
 // error handler : 넘어온 에러를 화면에 띄워주자~
 app.use(function(err, req, res, next) {

@@ -21,12 +21,8 @@ router.post('/login', (req,res,next)=>{
   }
   
   //무사히 넘어가면
-  next();
+  res.json({token:pw});
 })
-
-router.post('/login', (req,res,next)=>{
-  res.json({msg:'login success'});
-});
 
 //user 생성요청
 router.post('/', (req,res,next)=>{
@@ -51,6 +47,7 @@ router.post('/', (req,res,next)=>{
     error.status = 400;
     return next(error);
   }
+  
   //지금은 /에 대한 라우터 미들웨어를 두 번 사용했지만, 또 콜백함수 인자를 줘서 합칠수도있다.
   //}, (req,res,next)=>{res.json(req.CreatedUser);}도 가능. rout라는 string을 줘야 한다고 한다.
   

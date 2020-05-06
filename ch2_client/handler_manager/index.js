@@ -24,6 +24,10 @@ module.exports=[
     handler:require('./handler/OnPing'),
   },
   {
+    event:SocketEvent.PONG,
+    handler:require('./handler/OnPong'),
+  },
+  {
     event:SocketEvent.RECONNECT_ERROR,
     handler:require('./handler/OnReconnectError'),
   },
