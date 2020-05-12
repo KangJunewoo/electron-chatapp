@@ -1,0 +1,12 @@
+<!-- 암것도 없는 html 파일 -->
+<!-- 소켓을 localhost로 연결시키고
+  news 이벤트 발생시 해당 데이터를 클라이언트 콘솔에 뿌리고
+  my other event를 발생시킨 뒤 {my:'data'}를 달아준다. -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io.connect('http://localhost');
+  socket.on('news', (data) => {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
