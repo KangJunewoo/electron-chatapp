@@ -27,8 +27,15 @@ app.get('/', (req, res) => {
     * 해당 데이터를 서버 콘솔에 뿌린다.
  */
 io.on('connection', (socket) => {
+  console.log('user connected');
   socket.emit('news', { hello: 'world' });
   socket.on('my other event', (data) => {
     console.log(data);
   });
+  socket.on('disconnect', ()=>{
+    console.log('user disconnected');
+  })
 });
+
+const chat = io
+  .of('/chat')

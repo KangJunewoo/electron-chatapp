@@ -1,0 +1,17 @@
+말그대로 c언어의 헤더파일처럼
+미리 정의된 이벤트와
+그에 따른 handler를
+이 폴더 안에 싹 선언해놓는것.
+
+event에서는
+  이벤트 이름들을 선언한다음에
+  exports.뭐시기로 export할수 있게 해놓았고
+handler에서는
+  각각에 대한 js파일을 다 만들어서
+  뭘 하는지 선언하고 module.exports로 export함.
+
+index.js에서는
+  이벤트와 handler를 통합해주는 작업을 진행함
+  (event와 handler를 export했던 이유기도 하겠지.)
+  require 대잔치
+  그리고 이걸 또 export해서, 진짜 쓰일 수 있게 함.

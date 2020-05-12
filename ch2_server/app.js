@@ -6,13 +6,16 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 //morgan은 console에 GET /뭐시기뭐시기 200 나타내주는 미들웨어.
 const logger = require('morgan');
+// () 달아줘서 즉시실행.
 const io = require('socket.io')();
 const headerPrinter = require('./headerPrinter');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
+// express 앱에 io를 쓰겠다.
 app.io = io;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -35,6 +38,14 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+/**
+ * io.use로 미들웨어를 다는 코드.
+ * 토큰 출력하고
+ * 만약 토큰이 bye가 아니면 에러출력.
+ * bye이면 무사히 다음 단계로 ㄱㄱ.
+ * io는 왜 createError 다음에 올까..
+ */
+
 io.use((socket,next)=>{
   const token = socket.handshake.query.token;
   console.log(`token is ${token}`);
@@ -43,6 +54,12 @@ io.use((socket,next)=>{
   }
   next();
 });
+
+/**
+ * io가 연결되면
+ * hello 이벤트에 msg 출력하고
+ * 연결끊어지면 에러 출력한다.
+ */
 io.on('connection', (socket)=>{
   socket.on('hello', (message)=>{
     console.log(message);
