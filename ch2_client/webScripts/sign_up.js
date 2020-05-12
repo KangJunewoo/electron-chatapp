@@ -18,11 +18,18 @@
   // dom element 긁어와주고
   const userIdInput = document.getElementById('user-id-input');
   const userPwInput = document.getElementById('user-pw-input');
-  const signInButton = document.getElementById('button-SignIn');
+  const cancelButton = document.getElementById('button-Cancel');
   const signUpButton = document.getElementById('button-SignUp');
 
   // signin버튼 클릭하면 signInRequest 이벤트로 입력한 id비번 쏴준다!
-  signInButton.addEventListener('click', ()=>{
+  cancelButton.addEventListener('click', ()=>{
+    console.log('merong');
+    ipcRenderer.send('destroySignUpModal');
+
+  });
+
+  //사인업버튼 클릭하면 입력한 idpw를 signUpRequest로 쏴줌.
+  signUpButton.addEventListener('click', ()=>{
     console.log('click');
     const id = userIdInput.value;
     const pw = userPwInput.value;
@@ -30,21 +37,15 @@
       id:id,
       pw:pw
     };
-    ipcRenderer.send('signInRequest', parameter);
+    ipcRenderer.send('signUpRequest', parameter);
 
   });
-  ipcRenderer.on('signInRequest-Success', (event,message)=>{
+  ipcRenderer.on('signUpRequest-Success', (event,message)=>{
     console.log(message);
     alert(message.statusText);
   });
-  ipcRenderer.on('signInRequest-Failed', (event,message)=>{
+  ipcRenderer.on('signUpRequest-Failed', (event,message)=>{
     console.log(message);
     alert(message.statusText);
-  });
-
-  //사인업버튼 클릭하면 입력한 idpw를 signUpRequest로 쏴줌.
-  signUpButton.addEventListener('click', ()=>{
-    ipcRenderer.send('displaySignUpModal');
-
   });
 })();
