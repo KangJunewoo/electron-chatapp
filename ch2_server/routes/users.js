@@ -6,7 +6,7 @@ router.post('/login', (req,res,next)=>{
   // object destructuring 문법.
   const {id, pw} = req.body;
   
-  if(id !== 'hi'){
+  if(!id){
     const error = new Error('user not found');
     error.status = 404;
     return next(error);
@@ -14,7 +14,7 @@ router.post('/login', (req,res,next)=>{
     // 아래 방법은 에러처리 미들웨어를 사용하지 않는 코드.
     // return res.status(404).json({msg:'user not found'});
 
-  } else if(pw !== 'bye'){
+  } else if(!pw){
     const error = new Error('invalid password');
     error.status = 401;
     return next(error);

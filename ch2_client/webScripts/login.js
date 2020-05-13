@@ -20,6 +20,7 @@
   const userPwInput = document.getElementById('user-pw-input');
   const signInButton = document.getElementById('button-SignIn');
   const signUpButton = document.getElementById('button-SignUp');
+  const hidePage = document.getElementById('hide-page');
 
   // signin버튼 클릭하면 signInRequest 이벤트로 입력한 id비번 쏴준다!
   signInButton.addEventListener('click', ()=>{
@@ -35,12 +36,18 @@
   });
   ipcRenderer.on('signInRequest-Success', (event,message)=>{
     console.log(message);
-    alert(message.statusText);
+    alert('로그인 성공');
+    ipcRenderer.send('displayWaitDialog');
   });
   ipcRenderer.on('signInRequest-Failed', (event,message)=>{
     console.log(message);
     alert(message.statusText);
   });
+
+  ipcRenderer.on('hide-page', (event, message)=>{
+    // on 클래스명을 스위치처럼 와리가리 해줌.
+    hidePage.classList.toggle('on');
+  })
 
   //사인업버튼 클릭하면 입력한 idpw를 signUpRequest로 쏴줌.
   signUpButton.addEventListener('click', ()=>{

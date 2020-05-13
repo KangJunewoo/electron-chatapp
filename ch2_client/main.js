@@ -22,6 +22,8 @@ const SocketService = require('./service/SocketService');
 let win;
 let socket;
 let modal;
+let waitDialog;
+
 
 const displayLoginWindow = (event, message)=>{
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -39,7 +41,8 @@ const displayLoginWindow = (event, message)=>{
   win = new BrowserWindow(options);
   win.loadURL(url.format({
     pathname:path.join(__dirname, 'login.html'),
-    protocol:'file'
+    protocol:'file',
+    slashes:true,
   }));
   win.webContents.openDevTools();
   win.once('ready-to-show', ()=>{
@@ -54,6 +57,7 @@ const displayLoginWindow = (event, message)=>{
 };
 
 const displaySignUpModal = (event, message)=>{
+  win.webContents.send("hide-page");
   modal = new BrowserWindow({
     parent:win,
     modal:true,
@@ -68,7 +72,7 @@ const displaySignUpModal = (event, message)=>{
      * 강사는 이 옵션을 미리 줬던건가...???? 모르겠지만
      * 나름 의미있는 삽질이었다.
      */
-    webPreferences:{
+    webPreferences:{ 
       nodeIntegration:true
     }
   });
@@ -88,16 +92,68 @@ const displaySignUpModal = (event, message)=>{
 };
 
 const destroySignUpModal = (event, message)=>{
-  console.log('merong');
+  win.webContents.send('hide-page');
   modal.close();
 };
+
+const createSignUpRequest = (event, message)=>{
+  httpInstance.post('/users', message)
+    .then((response)=>{
+      event.sender.send('signUpRequest-Success', response.data);
+    })
+    .catch((error)=>{
+      const result={
+        status:error.response.status,
+        statusText:error.response.statusText
+      }
+      event.sender.send('signUpRequest-Failed', result);
+    })
+};
+
+const displayWaitDialog = (event, message)=>{
+  const options = {
+    width:800,
+    height:800,
+    resizeable:false,
+    fullscreenable:false,
+    show:false,
+    // frameless window가 생성됨. 위테두리가 없어..
+    frame:false,
+    webPreferences:{
+      affinity:true,
+      nodeIntegration:true,
+    }
+  };
+  waitDialog = new BrowserWindow(options);
+  waitDialog.loadURL(url.format({
+    pathname:path.join(__dirname, 'WaitDialog.html'),
+    protocol:'file',
+    // 이건 무엇인고..
+    slashes:true,
+  }));
+  waitDialog.once('ready-to-show', ()=>{
+    win.hide();
+    waitDialog.show();
+  });
+  waitDialog.on('closed',()=>{
+    console.log('window closed');
+    waitDialog=null;
+  });
+};
+
+const destroyWaitDialog = (event, message)=>{
+  
+};
+
 
 // 일렉트론 앱 구동 전 준비사항들.
 // 옵션세팅, 창띄우기, 보여질url, 개발자도구, ready-to-show에서 show 넘어가기, 닫히면 종료하기
 app.on('ready', displayLoginWindow);
-
+ipcMain.on('displayWaitDialog', displayWaitDialog);
+ipcMain.on('destroyWaitDialog', destroyWaitDialog);
 ipcMain.on('displaySignUpModal', displaySignUpModal);
 ipcMain.on('destroySignUpModal', destroySignUpModal);
+ipcMain.on('signUpRequest', createSignUpRequest);
 
 // signInRequest 이벤트를 감지했다면 실행될 콜백함수.
 // 소켓을 만들어 url과 옵션(토큰포함)을 넣고,
