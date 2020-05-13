@@ -155,21 +155,25 @@ const displayWaitDialog = (event, message)=>{
 
 const destroyWaitDialog = (event, message)=>{
   socket.removeListener('connect', listener);
-  win.loadFile(path.join(__dirname, 'main.html'));
-
-  // win.loadURL(url.format({
-  //   pathname:path.join(__dirname, 'main.html'),
-  //   protocol:'file',
-  //   // 이건 무엇인고..
-  //   slashes:true,
-  // }));
+  // win.loadFile(path.join(__dirname, 'main.html'));
+  console.log(path.join(__dirname, 'main.html'));
+  win.loadURL(url.format({
+    pathname:path.join(__dirname, 'main.html'),
+    protocol:'file',
+    // 이건 무엇인고..
+    slashes:true,
+  }));
   // FIXME : 여기서 ready-to-show로 안넘어가는 문제가...
-  win.on('did-finish-load', ()=>{
-    // waitDialog.close();
-    SocketService.addHandlers(socket,win,handler_manager);
-    waitDialog.close();
-    win.show();
-  });
+  // 야매로 해버리긴 했는데 이거 너무 찜찜하다.
+  SocketService.addHandlers(socket,win,handler_manager);
+  waitDialog.close();
+  win.show();
+  // win.on('ready-to-show', ()=>{
+  //   // waitDialog.close();
+  //   SocketService.addHandlers(socket,win,handler_manager);
+  //   waitDialog.close();
+  //   win.show();
+  // });
   
 };
 
