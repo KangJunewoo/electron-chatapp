@@ -13,6 +13,8 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const mongoose = require("mongoose");
 const Initializer = require('./init/initializer');
+const User = require('./model/User');
+const jsonwebtoken = require('jsonwebtoken');
 const app = express();
 Initializer.InitMongoDB(process.env, mongoose);
 // express 앱에 io를 쓰겠다.
@@ -50,11 +52,25 @@ app.use(function(req, res, next) {
 
 io.use((socket,next)=>{
   const token = socket.handshake.query.token;
+  const cert = 'secret';
   console.log(`token is ${token}`);
-  if(token !== 'bye'){
-    return next(new Error('Unauthorized'));
-  }
-  next();
+  jsonwebtoken.verify(token,cert,(err,decodedUser)=>{
+    if(err){
+      err.name==='TokenExpiredError'?next(new Error('tokenrefresh')):next(new Error('unauthorized'));
+      return;
+    }
+    User.findOne({id:decodedUser.id})
+      .then((user)=>{
+        if(!user){
+          return next(new Error('unauthorized'));
+        }
+        user.token===token?next():next(new Error('unauthorized'));
+        return;
+      })
+      .catch((error)=>{
+        return next(new Error('unauthorized'));
+      });
+  });
 });
 
 /**

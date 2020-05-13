@@ -16,3 +16,9 @@ routes/users.js
   id못찾음, pw다름, 로그인성공 구분
 
 ==== ch2_client ====
+
+
+==== 배포 ====
+electron-packager라는 npm 모듈을 global하게 설치하고
+elctron-packager ch2_client 해주면 알아서 빌드된 폴더가 생성이 됨.
+거기에 exe 파일 실행하면됨

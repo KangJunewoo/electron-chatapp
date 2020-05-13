@@ -8,6 +8,10 @@ module.exports=[
     handler:require('./handler/OnConnect'),
   },
   {
+    event:SocketEvent.ERROR,
+    handler:require('./handler/OnError'),
+  },
+  {
     event:SocketEvent.CONNECT_TIMEOUT,
     handler:require('./handler/OnConnectTimeout'),
   },

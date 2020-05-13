@@ -24,6 +24,7 @@ let socket;
 let modal;
 let waitDialog;
 let listener;
+let errorListener;
 
 const displayLoginWindow = (event, message)=>{
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -139,13 +140,15 @@ const displayWaitDialog = (event, message)=>{
       transports:['websocket'],
       forceNew:true,
       query:{
+        // 이 부분을 asdf로 바꾸면 권한이 없다고 뜬다.
         token:message.data.token
       }
     };
     // createSocket, addHandlers 둘 다 service에서 정의한 함수! 별 건 없다.
     socket=SocketService.createSocket(io,socketURL,socketOptions);
-    // 첫번째인 connect onconnect 리스너만.
+    // 첫번째인 connect onconnect 리스너만. index.js에서 달아놓은 그거!!
     listener = SocketService.addHandler(socket,waitDialog,handler_manager[0]);
+    errorListener = SocketService.addHandler(socket,waitDialog,handler_manager[1]);
   });
   waitDialog.on('closed',()=>{
     console.log('window closed');
@@ -155,6 +158,7 @@ const displayWaitDialog = (event, message)=>{
 
 const destroyWaitDialog = (event, message)=>{
   socket.removeListener('connect', listener);
+  socket.removeListener('error', errorListener);
   // win.loadFile(path.join(__dirname, 'main.html'));
   console.log(path.join(__dirname, 'main.html'));
   win.loadURL(url.format({

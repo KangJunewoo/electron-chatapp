@@ -21,6 +21,8 @@ exports.PING = 'ping';
 
 exports.PONG = 'pong';
 
+exports.ERROR = 'error';
+
 /**
  * user define event name
  */
