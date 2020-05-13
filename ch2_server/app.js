@@ -11,8 +11,10 @@ const io = require('socket.io')();
 const headerPrinter = require('./headerPrinter');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
+const mongoose = require("mongoose");
+const Initializer = require('./init/initializer');
 const app = express();
+Initializer.InitMongoDB(process.env, mongoose);
 // express 앱에 io를 쓰겠다.
 app.io = io;
 

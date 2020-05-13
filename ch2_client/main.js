@@ -174,7 +174,6 @@ const destroyWaitDialog = (event, message)=>{
   //   waitDialog.close();
   //   win.show();
   // });
-  
 };
 
 
