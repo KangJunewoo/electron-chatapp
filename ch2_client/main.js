@@ -23,7 +23,7 @@ let win;
 let socket;
 let modal;
 let waitDialog;
-
+let listener;
 
 const displayLoginWindow = (event, message)=>{
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -79,7 +79,7 @@ const displaySignUpModal = (event, message)=>{
 
   modal.loadURL(url.format({
     pathname:path.join(__dirname, 'SignUpModal.html'),
-    protocol:'file:'
+    protocol:'file'
   }));
 
   modal.on('ready-to-show', ()=>{
@@ -134,6 +134,18 @@ const displayWaitDialog = (event, message)=>{
   waitDialog.once('ready-to-show', ()=>{
     win.hide();
     waitDialog.show();
+    const socketURL = 'ws://127.0.0.1:3000';
+    const socketOptions={
+      transports:['websocket'],
+      forceNew:true,
+      query:{
+        token:message.data.token
+      }
+    };
+    // createSocket, addHandlers 둘 다 service에서 정의한 함수! 별 건 없다.
+    socket=SocketService.createSocket(io,socketURL,socketOptions);
+    // 첫번째인 connect onconnect 리스너만.
+    listener = SocketService.addHandler(socket,waitDialog,handler_manager[0]);
   });
   waitDialog.on('closed',()=>{
     console.log('window closed');
@@ -142,6 +154,22 @@ const displayWaitDialog = (event, message)=>{
 };
 
 const destroyWaitDialog = (event, message)=>{
+  socket.removeListener('connect', listener);
+  win.loadFile(path.join(__dirname, 'main.html'));
+
+  // win.loadURL(url.format({
+  //   pathname:path.join(__dirname, 'main.html'),
+  //   protocol:'file',
+  //   // 이건 무엇인고..
+  //   slashes:true,
+  // }));
+  // FIXME : 여기서 ready-to-show로 안넘어가는 문제가...
+  win.on('did-finish-load', ()=>{
+    // waitDialog.close();
+    SocketService.addHandlers(socket,win,handler_manager);
+    waitDialog.close();
+    win.show();
+  });
   
 };
 
@@ -163,19 +191,7 @@ ipcMain.on('signInRequest', (event,message)=>{
   // 백으로 post요청을 보내면 response가 돌아오겠지.
   httpInstance.post('/users/login', message)
     .then((response)=>{
-      // promise는 추후에 계속 이야기해준다고 한다.
-      const socketURL = 'ws://127.0.0.1:3000';
-      const socketOptions={
-        transports:['websocket'],
-        forceNew:true,
-        query:{
-          token:response.data.token
-        }
-      };
-      // createSocket, addHandlers 둘 다 service에서 정의한 함수! 별 건 없다.
-      socket=SocketService.createSocket(io,socketURL,socketOptions);
-      SocketService.addHandlers(socket,win,handler_manager);
-      event.sender.send('signInRequest-Success', response);
+       event.sender.send('signInRequest-Success', response);
     })
     .catch((error)=>{
       const result={
@@ -183,7 +199,7 @@ ipcMain.on('signInRequest', (event,message)=>{
         statusText:error.response.statusText
       }
       event.sender.send('signInRequest-Failed', result);
-    })
+    });
 });
 
 app.on('window-all-closed', ()=>{

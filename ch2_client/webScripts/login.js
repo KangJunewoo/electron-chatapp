@@ -37,7 +37,7 @@
   ipcRenderer.on('signInRequest-Success', (event,message)=>{
     console.log(message);
     alert('로그인 성공');
-    ipcRenderer.send('displayWaitDialog');
+    ipcRenderer.send('displayWaitDialog', message);
   });
   ipcRenderer.on('signInRequest-Failed', (event,message)=>{
     console.log(message);

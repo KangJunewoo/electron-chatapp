@@ -10,12 +10,8 @@
    * 뭐 이런식으로 쭉쭉.
    */
   const ipcRenderer = electron.ipcRenderer;
-  // 소켓 연결되면 hello 이벤트 발생했었지.
-  ipcRenderer.on('hello', (event, args)=>{
-    console.log(event);
-    console.log(event.sender);
-    event.sender.send('destroyWaitDialog');
-    console.log(event.sender);
-    console.log('event send complete');
+  const SocketEvent = require('./handler_manager/event/SocketEvent');
+  ipcRenderer.on(SocketEvent.HELLO, (event, message)=>{
+    console.log(message);
   });
 })();
