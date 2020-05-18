@@ -54,6 +54,36 @@ dict[SocketEvent.RECONNECTING] = {
   handler:require('./handler/OnReconnecting')
 };
 
+dict[SocketEvent.RECONNECT]={
+  type:1,
+  event:SocketEvent.RECONNECT,
+  handler:require('./handler/OnReconnect')
+}
+
+dict[SocketEvent.TOKENREFRESHREQUIRED]={
+  type:1,
+  event:SocketEvent.TOKENREFRESHREQUIRED,
+  handler:require('./handler/OnTokenRefreshRequired')
+}
+
+dict[SocketEvent.BROADCAST_MESSAGE]={
+  type:1,
+  event:SocketEvent.BROADCAST_MESSAGE,
+  handler:require('./handler/OnBroadcastMessage')
+}
+
+dict[SocketEvent.RECEIVE_INVITEUSER]={
+  type:1,
+  event:SocketEvent.RECEIVE_INVITEUSER,
+  handler:require('./handler/OnReceiveInviteUser')
+}
+
+dict[SocketEvent.RECONNECT_ATTEMPT]={
+  type:1,
+  event:SocketEvent.RECONNECT_ATTEMPT,
+  handler:require('./handler/OnReconnectAttempt')
+}
+
 // module.exports=[
 //   {
 //     event:SocketEvent.CONNECT,

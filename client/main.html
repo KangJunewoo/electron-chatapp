@@ -5,10 +5,55 @@
   <!--보안문제로 넣어준 태그-->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="stylesheets/init.css">
+  <link rel="stylesheet" href="stylesheets/roomArea.css">
+  <link rel="stylesheet" href="stylesheets/roomMenuArea.css">
+  <link rel="stylesheet" href="stylesheets/chatArea.css">
   <title>FirstExample.</title>
 </head>
 <body>
-  <h1>메인페이지</h1>
+  <div class="roomArea" id="roomArea">
+    <div class="profile" id="profile">test@gmail.com</div>
+    <div class="openFriendMenuButton" id='openFriendMenuButton'>친구메뉴</div>
+    <ul class="roomList" id="roomList">
+      <li class="roomButton" id="134nk234">room1</li>
+      <li class="roomButton" id="134nk234">room2</li>
+    </ul>
+    <div class="createRoomButton" id="createRooomButton">방생성</div>
+  </div>
+  <div class="roomMenuArea">
+    <ul class="roomMenu" id="roomMenu">
+      <li><div class="button" id="inviteRoomButton">초대</div></li>
+      <li><div class="button" id="leaveRoomButton">나가기</div></li>
+    </ul>
+  </div>
+  <div class="chatAreaWrapper">
+    <div class="chatArea">
+      <ul class="messageList" id="messageList">
+        <li class="messageElement" id="object1">
+          <div>
+            <p class="messageElementProfile">test@gmail.com</p>
+            <p class="messageElementDate">2018-03-21 14:32:22</p>
+            <div class="messageElementReSendButton">재전송</div>
+            <p class="messageContent">안녕하세요. 첫 메세지</p>
+            
+          </div>
+        </li>
+        <li class="messageElement" id="object2">
+          <div>
+            <p class="messageElementProfile">test@gmail.com</p>
+            <p class="messageElementDate">2018-03-21 15:32:22</p>
+            <div class="messageElementReSendButton">재전송</div>
+            <p class="messageContent">안녕하세요. 두번째 메세지</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="chatAreaInputWrapper">
+      <textarea id="messageTextArea" placeholder='메세지를 입력하세요' class="messageTextArea"></textarea>
+      <div class="sendMessageButton" id="sendMessageButton">전송</div>
+    </div>
+  </div>
 </body>
 <script src='./webScripts/main.js'></script>
 </html>

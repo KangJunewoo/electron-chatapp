@@ -23,8 +23,16 @@ exports.PONG = 'pong';
 
 exports.ERROR = 'error';
 
+exports.RECONNECT_ATTEMPT = 'reconnect_attempt';
+
+exports.RECONNECT = 'reconnect';
+
 /**
  * user define event name
  */
 
 exports.HELLO = 'hello';
+
+exports.TOKENREFRESHREQUIRED = 'toeknRefresh-Required';
+exports.BROADCAST_MESSAGE = 'broadcastMessage';
+exports.RECEIVE_INVITEUSER = 'receiveInviteUser';

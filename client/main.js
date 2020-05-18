@@ -15,10 +15,12 @@ const httpInstance = axios.create({
   baseURL:'http://127.0.0.1:3000'
 })
 
+// TODO : 사실 manager이 뭔지 감이 확 오지 않는다. handler도 감이 안온다.
 const handler_manager = require('./handler_manager');
 const SocketService = require('./service/SocketService');
 const SocketEvent = require('./handler_manager/event/SocketEvent');
-
+const TokenManager = require('./service/TokenManager');
+const tokenManager = new TokenManager();
 
 // 윈도우의 win과 소켓의 socket
 let win;
@@ -27,6 +29,7 @@ let modal;
 let waitDialog;
 let listener;
 let errorListener;
+let locale;
 
 const displayLoginWindow = (event, message)=>{
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -142,15 +145,17 @@ const displayWaitDialog = (event, message)=>{
       transports:['websocket'],
       forceNew:true,
       query:{
+        id:tokenManager.getId(),
         // 이 부분을 asdf로 바꾸면 권한이 없다고 뜬다.
         token:message.data.token
       }
     };
     // createSocket, addHandlers 둘 다 service에서 정의한 함수! 별 건 없다.
     socket=SocketService.createSocket(io,socketURL,socketOptions);
+    tokenManager.setToken(message.data.token);
     // 첫번째인 connect onconnect 리스너만. index.js에서 달아놓은 그거!!
     listener = SocketService.addHandler(socket,waitDialog,handler_manager[SocketEvent.CONNECT]);
-    errorListener = SocketService.addHandler(socket,waitDialog,handler_manager[SocketEvent.ERROR]);
+    errorListener = SocketService.addHandlerWithTokenManager(socket,waitDialog,handler_manager[SocketEvent.ERROR], tokenManager);
   });
   waitDialog.on('closed',()=>{
     console.log('window closed');
@@ -161,8 +166,10 @@ const displayWaitDialog = (event, message)=>{
 const destroyWaitDialog = (event, message)=>{
   socket.removeListener('connect', listener);
   socket.removeListener('error', errorListener);
-  // win.loadFile(path.join(__dirname, 'main.html'));
-  console.log(path.join(__dirname, 'main.html'));
+  win.webContents.clearHistory();
+  win.setResizable(true);
+  win.setFullScreenable(true);
+  win.setMinimumSize(600,600);
   win.loadURL(url.format({
     pathname:path.join(__dirname, 'main.html'),
     protocol:'file',
@@ -173,9 +180,16 @@ const destroyWaitDialog = (event, message)=>{
   // 야매로 해버리긴 했는데 이거 너무 찜찜하다.
   SocketService.addHandlers(socket,win,handler_manager);
   SocketService.addHandler(socket, win, handler_manager[SocketEvent.CONNECT]);
-  SocketService.addHandler(socket, win, handler_manager[SocketEvent.ERROR]);
-  SocketService.addHandler(socket,win,handler_manager[SocketEvent.DISCONNECT]);
+  SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.RECONNECT_ATTEMPT],tokenManager);
+  SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.DISCONNECT],tokenManager);
+  SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.TOKENREFRESHREQUIRED],tokenManager);
+  SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.BROADCAST_MESSAGE],tokenManager);
+  SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.RECEIVE_INVITEUSER],tokenManager);
+  SocketService.addHandlerWithTokenManager(socket, win, handler_manager[SocketEvent.ERROR], tokenManager);
+  
   waitDialog.close();
+  locale=app.getLocale();
+  win.webContents.send('getProfile',{name:tokenManager.getId(),locale:locale});
   win.show();
   // win.on('ready-to-show', ()=>{
   //   // waitDialog.close();
@@ -203,7 +217,8 @@ ipcMain.on('signInRequest', (event,message)=>{
   // 백으로 post요청을 보내면 response가 돌아오겠지.
   httpInstance.post('/users/login', message)
     .then((response)=>{
-       event.sender.send('signInRequest-Success', response);
+      tokenManager.setId(message.id);
+      event.sender.send('signInRequest-Success', response);
     })
     .catch((error)=>{
       const result={
