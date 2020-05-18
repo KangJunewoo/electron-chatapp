@@ -10,7 +10,7 @@ html,body{
   display:block;
   margin:auto;
   position:relative;
-  top:calc(25%-52px);
+  top:calc(25% - 52px);
   border:52px solid #f3f3f3;
   border-top:52px solid #3498db;
   border-radius:50%;

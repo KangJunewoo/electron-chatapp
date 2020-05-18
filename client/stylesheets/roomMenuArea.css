@@ -1,7 +1,7 @@
 .roomMenuArea{
   display:block;
   position:relative;
-  width:calc(100%-120px);
+  width:calc(100% - 120px);
   height:82px;
   margin-left: 120px;
   align-content: center;
