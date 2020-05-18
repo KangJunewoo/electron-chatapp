@@ -17,6 +17,8 @@ const httpInstance = axios.create({
 
 const handler_manager = require('./handler_manager');
 const SocketService = require('./service/SocketService');
+const SocketEvent = require('./handler_manager/event/SocketEvent');
+
 
 // 윈도우의 win과 소켓의 socket
 let win;
@@ -147,8 +149,8 @@ const displayWaitDialog = (event, message)=>{
     // createSocket, addHandlers 둘 다 service에서 정의한 함수! 별 건 없다.
     socket=SocketService.createSocket(io,socketURL,socketOptions);
     // 첫번째인 connect onconnect 리스너만. index.js에서 달아놓은 그거!!
-    listener = SocketService.addHandler(socket,waitDialog,handler_manager[0]);
-    errorListener = SocketService.addHandler(socket,waitDialog,handler_manager[1]);
+    listener = SocketService.addHandler(socket,waitDialog,handler_manager[SocketEvent.CONNECT]);
+    errorListener = SocketService.addHandler(socket,waitDialog,handler_manager[SocketEvent.ERROR]);
   });
   waitDialog.on('closed',()=>{
     console.log('window closed');
@@ -170,6 +172,9 @@ const destroyWaitDialog = (event, message)=>{
   // FIXME : 여기서 ready-to-show로 안넘어가는 문제가...
   // 야매로 해버리긴 했는데 이거 너무 찜찜하다.
   SocketService.addHandlers(socket,win,handler_manager);
+  SocketService.addHandler(socket, win, handler_manager[SocketEvent.CONNECT]);
+  SocketService.addHandler(socket, win, handler_manager[SocketEvent.ERROR]);
+  SocketService.addHandler(socket,win,handler_manager[SocketEvent.DISCONNECT]);
   waitDialog.close();
   win.show();
   // win.on('ready-to-show', ()=>{
