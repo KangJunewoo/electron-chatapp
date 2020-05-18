@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="stylesheets/FriendMenuDialog.css">
   <link rel="stylesheet" href="stylesheets/AddFriendDialog.css">
   <link rel="stylesheet" href="stylesheets/ElementLoader.css">
+  <link rel="stylesheet" href="stylesheets/ListFriendDialog.css">
+  <link rel="stylesheet" href="stylesheets/ListFriendRequestDialog.css">
+  <link rel="stylesheet" href="stylesheets/RefreshTokenDialog.css">
   <title>FirstExample.</title>
 </head>
 <body>
@@ -96,7 +99,7 @@
       <div class="friendMenuDialog-button" id="closeFriendMenuDialogButton">취소</div>
     </div>
   </div> -->
-  <div class="DialogWrapper depth2" id='addFriendDialogWrapper'>
+  <!-- <div class="DialogWrapper depth2" id='addFriendDialogWrapper'>
     <div class="addFriendDialog">
       <p class='addFriendDialog-title'>친구 추가</p>
       <input type="text" placeholder="친구아이디를 입력하세요." id="input-friendId">
@@ -108,6 +111,40 @@
       <div class="Dialog-button confirmButton" id="addFriendConfirmButton">요청</div>
       <div class="Dialog-button cancelButton" id="addFriendCancelButton">취소</div>
       
+    </div>
+  </div> -->
+  <!-- <div class="DialogWrapper depth2">
+    <div class="listFriendDialog">
+      <p class='listFriendDialog-title'>친구 추가</p>
+      <ul class="friendList" id="friendList">
+        <li class="friendElement">
+          <p class="friendId">test@gmail.com</p>
+          <button class="cancelFriendShipButton">친구삭제</button>
+          <div class="elementLoader"></div>
+        </li>
+      </ul>
+      <div class="friendMenuDialog-button" id="listCancelButton">닫기</div>
+    </div>
+  </div> -->
+  <!-- <div class="DialogWrapper depth2">
+    <div class="listFriendRequestDialog">
+      <p class='listFriendRequestDialog-title'>친구 요청 목록</p>
+      <ul class="friendRequestList" id="friendRequestList">
+        <li class="requestElement">
+          <p class="requestFriendId">test@gmail.com</p>
+          <button class="FriendShipButton" value='1'>수락</button>
+          <button class="FriendShipButton" value='0'>거절</button>
+          <div class="elementLoader"></div>
+        </li>
+      </ul>
+      <div class="friendMenuDialog-button" id="listCancelButton">닫기</div>
+    </div>
+  </div> -->
+  
+  <div class="DialogWrapper depthTop">
+    <div class="refreshTokenDialog">
+      <p>토큰을 갱신중입니다.</p>
+      <div class="loader"></div>
     </div>
   </div>
 </body>

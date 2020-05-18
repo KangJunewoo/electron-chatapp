@@ -5,3 +5,8 @@ body,html{
   overflow:hidden;
   
 }
+/*이걸 넣어주면 로딩바가 돌아간다 singi bangi*/
+@keyframes spin{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
