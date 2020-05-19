@@ -7,8 +7,8 @@ function InviteRoomDialog(document){
   const Button=require('./Button');
   this.view=document.getElementById('inviteRoomDialogWrapper');
   this.userIdInput=document.getElementById('input-userId');
-  this.confirmButton=new Button(document.getElementById('inviteConfirmbutton'));
-  this.cancelButton=new Button(document.getElementById('inviteCancelbutton'));
+  this.confirmButton=new Button(document.getElementById('inviteConfirmButton'));
+  this.cancelButton=new Button(document.getElementById('inviteCancelButton'));
 }
 
 InviteRoomDialog.prototype.show=function(){

@@ -6,8 +6,8 @@ function LeaveRoomDialog(document){
   }
   const Button=require('./Button');
   this.view=document.getElementById('leaveRoomDialogWrapper');
-  this.confirmButton=new Button(document.getElementById('leaveConfirmbutton'));
-  this.cancelButton=new Button(document.getElementById('leaveCancelbutton'));
+  this.confirmButton=new Button(document.getElementById('leaveConfirmButton'));
+  this.cancelButton=new Button(document.getElementById('leaveCancelButton'));
 }
 
 LeaveRoomDialog.prototype.show=function(){
