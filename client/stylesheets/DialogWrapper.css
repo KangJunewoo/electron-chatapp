@@ -1,6 +1,6 @@
 .DialogWrapper{
   position:fixed;
-  display:block;
+  display:none;
   top:0;
   left:0;
   width:100%;
@@ -16,7 +16,7 @@
 }
 .DialogWrapper.depth2{
   position:fixed;
-  display:block;
+  display:none;
   top:0;
   left:0;
   width:100%;
@@ -32,7 +32,7 @@
 
 .DialogWrapper.depthTop{
   position:fixed;
-  display:block;
+  display:none;
   top:0;
   left:0;
   width:100%;

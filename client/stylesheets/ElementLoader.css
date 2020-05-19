@@ -1,7 +1,7 @@
 .elementLoader{
   width:16px;
   height:16px;
-  display:block;
+  display:none;
   margin:auto;
   position:relative;
   top:-74px;
@@ -22,7 +22,7 @@
 .addElementLoader{
   width:16px;
   height:16px;
-  display:block;
+  display:none;
   margin:auto;
   position:absolute;
   top:0;

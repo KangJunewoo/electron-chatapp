@@ -65,30 +65,30 @@
       <div class="sendMessageButton" id="sendMessageButton">전송</div>
     </div>
   </div>
-  <!-- <div class="DialogWrapper">
+  <div class="DialogWrapper" id='inviteRoomDialogWrapper'>
     <div class="inviteRoomDialog">
       <p>초대할 유저의 아이디를 입력해주세요.</p>
       <input type="email" placeholder='example@example.com' id="input-userId">
       <div class="Dialog-button confirmButton" id="inviteConfirmButton">확인</div>
       <div class="Dialog-button cancelButton" id="inviteCancelButton">취소</div>
     </div>
-  </div> -->
-  <!-- <div class="DialogWrapper">
+  </div>
+  <div class="DialogWrapper" id='leaveRoomDialogWrapper'>
     <div class="leaveRoomDialog">
       <p>방을 나가시겠습니까?</p>
       <div class="Dialog-button confirmButton" id="leaveConfirmButton">확인</div>
       <div class="Dialog-button cancelButton" id="leaveCancelButton">취소</div>
     </div>
-  </div> -->
-  <!-- <div class="DialogWrapper">
+  </div>
+  <div class="DialogWrapper" id='createRoomDialogWrapper'>
     <div class="createRoomDialog">
       <p>생성할 방 이름을 입력해주세요.</p>
       <input type="text" placeholder='방 이름을 입력하세요.' id="input-roomName">
       <div class="Dialog-button confirmButton" id="createConfirmButton">확인</div>
       <div class="Dialog-button cancelButton" id="createCancelButton">취소</div>
     </div>
-  </div> -->
-  <!-- <div class="DialogWrapper">
+  </div>
+  <div class="DialogWrapper" id='friendMenuDialogWrapper'>
     <div class="friendMenuDialog">
       <p>친구 기능</p>
       <ul class="friendMenuList" id="friendMenuList">
@@ -98,8 +98,8 @@
       </ul>
       <div class="friendMenuDialog-button" id="closeFriendMenuDialogButton">취소</div>
     </div>
-  </div> -->
-  <!-- <div class="DialogWrapper depth2" id='addFriendDialogWrapper'>
+  </div>
+  <div class="DialogWrapper depth2" id='addFriendDialogWrapper'>
     <div class="addFriendDialog">
       <p class='addFriendDialog-title'>친구 추가</p>
       <input type="text" placeholder="친구아이디를 입력하세요." id="input-friendId">
@@ -112,8 +112,8 @@
       <div class="Dialog-button cancelButton" id="addFriendCancelButton">취소</div>
       
     </div>
-  </div> -->
-  <!-- <div class="DialogWrapper depth2">
+  </div>
+  <div class="DialogWrapper depth2" id='listFriendDialogWrapper'>
     <div class="listFriendDialog">
       <p class='listFriendDialog-title'>친구 추가</p>
       <ul class="friendList" id="friendList">
@@ -125,8 +125,8 @@
       </ul>
       <div class="friendMenuDialog-button" id="listCancelButton">닫기</div>
     </div>
-  </div> -->
-  <!-- <div class="DialogWrapper depth2">
+  </div>
+  <div class="DialogWrapper depth2" id='listFriendRequestDialogWrapper'>
     <div class="listFriendRequestDialog">
       <p class='listFriendRequestDialog-title'>친구 요청 목록</p>
       <ul class="friendRequestList" id="friendRequestList">
@@ -137,11 +137,11 @@
           <div class="elementLoader"></div>
         </li>
       </ul>
-      <div class="friendMenuDialog-button" id="listCancelButton">닫기</div>
+      <div class="friendMenuDialog-button" id="listFriendCloseButton">닫기</div>
     </div>
-  </div> -->
+  </div>
   
-  <div class="DialogWrapper depthTop">
+  <div class="DialogWrapper depthTop" id='refreshTokenDialogWrapper'>
     <div class="refreshTokenDialog">
       <p>토큰을 갱신중입니다.</p>
       <div class="loader"></div>

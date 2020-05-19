@@ -11,7 +11,11 @@
    */
   const ipcRenderer = electron.ipcRenderer;
   const SocketEvent = require('./handler_manager/event/SocketEvent');
+  const DialogFactory=require('./webScripts/DialogFactory');
+  const dialogFactory=new DialogFactory(document);
   ipcRenderer.on(SocketEvent.HELLO, (event, message)=>{
     console.log(message);
   });
+
+  console.log(dialogFactory.getDialog('refreshTokenDialog').show());
 })();
