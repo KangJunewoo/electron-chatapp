@@ -14,9 +14,11 @@
   const DialogFactory=require('./webScripts/DialogFactory');
   const RoomMenuArea = require('./webScripts/RoomMenuArea');
   const RoomArea=require('./webScripts/RoomArea');
+  const ChatArea=require('./webScripts/ChatArea');
   const dialogFactory=new DialogFactory(document);
   const roomMenuArea=  new RoomMenuArea(document);
   const roomArea=new RoomArea(document);
+  const chatArea=new ChatArea(document);
   ipcRenderer.on(SocketEvent.HELLO, (event, message)=>{
     console.log(message);
   });
@@ -83,6 +85,8 @@
   roomArea.CreateRoomButton.setEventListener(()=>{
     dialogFactory.getDialog('createRoomDialog').show();
   });
-
+  chatArea.MessageInputview.setSendEventListener(()=>{
+    alert(chatArea.MessageInputview.getMessage());
+  });
   
 })();
