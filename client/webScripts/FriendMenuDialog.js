@@ -15,7 +15,10 @@ FriendMenuDialog.prototype.show=function(){
   this.view.classList.toggle("show");
   return Promise.resolve();
 };
+FriendMenuDialog.prototype.openDialog=function(dialog, ipcRenderer){
+  dialog.show(ipcRenderer);
 
+}
 FriendMenuDialog.prototype.setSelectListener=function(listener){
   if(this.eventListener){
     this.MenuList.removeEventListener('click', this.eventListener);

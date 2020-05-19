@@ -10,10 +10,10 @@ function AddFriendDialog(document){
   this.searchUserResult = document.getElementById('searchUserResult');
   this.elementLoader=document.getElementById('addElementLoader');
   this.confirmButton=new Button(document.getElementById('addFriendConfirmButton'));
-  this.cancelButton=new Button(document.getElementById('addFriendCancelbutton'));
+  this.cancelButton=new Button(document.getElementById('addFriendCancelButton'));
 }
 
-AddFriendDialog.prototype.defaultValue='검색겨로가가 없습니다.';
+AddFriendDialog.prototype.defaultValue='검색경로가 없습니다.';
 AddFriendDialog.prototype.show=function(){
   this.view.classList.toggle("show");
   return Promise.resolve();

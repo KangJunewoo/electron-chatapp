@@ -35,6 +35,29 @@
   dialogFactory.getDialog('friendMenuDialog').CloseButton.setEventListener(()=>{
     dialogFactory.getDialog('friendMenuDialog').show();
   });
+  dialogFactory.getDialog('addFriendDialog').confirmButton.setEventListener(()=>{
+    dialogFactory.getDialog('addFriendDialog').show();
+  })
+  dialogFactory.getDialog('addFriendDialog').cancelButton.setEventListener(()=>{
+    dialogFactory.getDialog('addFriendDialog').show();
+  })
+  dialogFactory.getDialog('listFriendDialog').CloseButton.setEventListener(()=>{
+    dialogFactory.getDialog('listFriendDialog').show();
+  })
+  dialogFactory.getDialog('listFriendRequestDialog').CloseButton.setEventListener(()=>{
+    dialogFactory.getDialog('listFriendRequestDialog').show();
+  })
+  dialogFactory.getDialog('friendMenuDialog').setSelectListener(()=>{
+    if(event.target.tagName==='LI'){
+      if(event.target.id==='addFriend'){
+        dialogFactory.getDialog('friendMenuDialog').openDialog(dialogFactory.getDialog('addFriendDialog'), ipcRenderer);
+      } else if(event.target.id==='showFriends'){
+        dialogFactory.getDialog('friendMenuDialog').openDialog(dialogFactory.getDialog('listFriendDialog'), ipcRenderer);
+      } else{
+        dialogFactory.getDialog('friendMenuDialog').openDialog(dialogFactory.getDialog('listFriendRequestDialog'), ipcRenderer);
+      }
+    }
+  });
   dialogFactory.getDialog('createRoomDialog').confirmButton.setEventListener(()=>{
     dialogFactory.getDialog('createRoomDialog').show();
   });
