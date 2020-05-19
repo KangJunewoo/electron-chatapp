@@ -8,7 +8,7 @@ function CreateRoomDialog(document){
   this.view=document.getElementById('createRoomDialogWrapper');
   this.roomNameInput=document.getElementById('input-roomName');
   this.confirmButton=new Button(document.getElementById('createConfirmButton'));
-  this.cancelButton=new Button(document.getElementById('createCancelbutton'));
+  this.cancelButton=new Button(document.getElementById('createCancelButton'));
 }
 
 CreateRoomDialog.prototype.show=function(){

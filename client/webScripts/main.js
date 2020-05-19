@@ -32,6 +32,17 @@
   dialogFactory.getDialog('leaveRoomDialog').cancelButton.setEventListener(()=>{
     dialogFactory.getDialog('leaveRoomDialog').show();
   });
+  dialogFactory.getDialog('friendMenuDialog').CloseButton.setEventListener(()=>{
+    dialogFactory.getDialog('friendMenuDialog').show();
+  });
+  dialogFactory.getDialog('createRoomDialog').confirmButton.setEventListener(()=>{
+    dialogFactory.getDialog('createRoomDialog').show();
+  });
+  dialogFactory.getDialog('createRoomDialog').cancelButton.setEventListener(()=>{
+    dialogFactory.getDialog('createRoomDialog').show();
+  });
+
+  
   roomMenuArea.MenuList.setSelectListener(()=>{
     if(event.target.tagName==='DIV'){
       if(event.target.id==='inviteRoomButton'){
