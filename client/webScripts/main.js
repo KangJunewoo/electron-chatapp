@@ -88,5 +88,5 @@
   chatArea.MessageInputview.setSendEventListener(()=>{
     alert(chatArea.MessageInputview.getMessage());
   });
-  
+  chatArea.MessageInputview.textArea.addEventListener('keydown', chatArea.MessageInputview.keyDownEventHandler.bind(chatArea.MessageInputview));
 })();

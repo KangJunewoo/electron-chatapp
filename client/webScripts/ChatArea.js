@@ -7,7 +7,7 @@ function ChatArea(document){
   const MessageList = require('./MessageList');
   const MessageInputView=require('./MessageInputView');
   this.MessageList=new MessageList(document);
-  this.MessageInputView=new MessageInputView(document);
+  this.MessageInputview=new MessageInputView(document);
 
 }
 module.exports = ChatArea;
