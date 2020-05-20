@@ -61,6 +61,12 @@
     }
   });
   dialogFactory.getDialog('createRoomDialog').confirmButton.setEventListener(()=>{
+    const room = {
+      _id:'n213n4n1324',
+      roomName:undefined
+    };
+    room.roomName=dialogFactory.getDialog('createRoomDialog').getRoomName();
+    roomArea.RoomList.addItem(room);
     dialogFactory.getDialog('createRoomDialog').show();
   });
   dialogFactory.getDialog('createRoomDialog').cancelButton.setEventListener(()=>{

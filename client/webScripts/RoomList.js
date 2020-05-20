@@ -4,8 +4,9 @@ function RoomList(document){
   if(!(this instanceof RoomList)){
     throw Error('must be created with new keyword');
   }
+  const MessageItemFactory = require('./MessageItemFactory');
   this.items=document.getElementById('roomList');
-  this.ItemFactory=undefined;
+  this.ItemFactory=new MessageItemFactory(document);
   this.CurrentItem=undefined;
   this.PreviousItem=undefined;
   this.eventListener=undefined;
