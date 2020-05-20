@@ -1,4 +1,4 @@
-'use strict';
+
 
 (()=>{
   const electron = require('electron');

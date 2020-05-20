@@ -1,4 +1,4 @@
-'use strict';
+
 
 function LeaveRoomDialog(document){
   if(!(this instanceof LeaveRoomDialog)){

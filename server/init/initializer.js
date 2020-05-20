@@ -1,4 +1,4 @@
-'use strict';
+
 
 exports.InitMongoDB=(env, mongoose)=>{
   if(env.VCAP_SERVICES){

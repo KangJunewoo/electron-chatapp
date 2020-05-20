@@ -1,4 +1,4 @@
-'use strict';
+
 
 function MessageItemFactory(document){
   if(!(this instanceof MessageItemFactory)){

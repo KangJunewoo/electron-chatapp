@@ -1,4 +1,4 @@
-'use strict';
+
 
 module.exports = (socket, win) => {
   const SocketEvent = require('../event/SocketEvent');

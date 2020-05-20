@@ -1,24 +1,14 @@
-'use strict';
 
-/**
- * main.js에서 쓰일 사용자 정의 service들.
- * 
- * createSocket은 근데 거의 아무것도 안하는것같고
- * 
- * addHandlers는
- * handlerManager의 각 handler에 대해
- * 콜백함수를 정의하고
- * 소켓의 각 이벤트에 해당 콜백을 등록한 다음
- * 그 콜백모음인 listeners를 리턴하는듯.
- * 
- * addHandler는
- * 비슷한데 여러개 말고 한개만.
- */
 
+// 소켓 관련 사용자 정의 서비스들. (서비스 == 리스너 인갑다.)
+// handler로 listener를 설정해서 소켓에 연결하고 리턴하는 구조. 이따 다시 보자.
+
+// 1. createSocket : 소켓을 생성한다.
 exports.createSocket=(io,socketURL,socketOptions)=>{
   return io(socketURL, socketOptions);
 };
 
+// 2. addHandlers : 핸들러들을 추가한다 (핸들러는 handler_manager에서 정의해놓은 것들!)
 exports.addHandlers = (socket, win, handlerManager) => {
   let listeners=[];
   handlerManager.forEach((handler)=>{
@@ -34,12 +24,15 @@ exports.addHandlers = (socket, win, handlerManager) => {
   return listeners;
 };
 
+// 3. addHandler : 핸들러를 추가한다.
 exports.addHandler = (socket, win, handler) => {
+  // bind는 함수를 외부로 끌어다 쓸 때 this를 설정해주는거라고 생각하면 될듯?
   let listener=handler.handler.bind(null,socket,win);
   socket.on(handler.event, listener);
   return listener;
 };
 
+// 4. addHandlerWithTokenManager : 핸들러를 토큰매니저와 함께 추가한다.
 exports.addHandlerWithTokenManager = (socket, win, handler, TokenManager)=>{
   let listener=handler.handler.bind(null,socket,win, TokenManager);
   socket.on(handler.event, listener);

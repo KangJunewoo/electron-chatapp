@@ -1,4 +1,4 @@
-'use strict';
+
 
 function RefreshTokenDialog(document){
   if(!(this instanceof RefreshTokenDialog)){

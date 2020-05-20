@@ -1,4 +1,4 @@
-'use strict';
+
 
 function ListFriendDialog(document){
   if(!(this instanceof ListFriendDialog)){

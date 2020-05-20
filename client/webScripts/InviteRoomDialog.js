@@ -1,4 +1,4 @@
-'use strict';
+
 
 function InviteRoomDialog(document){
   if(!(this instanceof InviteRoomDialog)){

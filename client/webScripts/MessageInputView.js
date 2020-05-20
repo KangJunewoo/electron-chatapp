@@ -1,4 +1,4 @@
-'use strict';
+
 
 function MessageInputView(document){
   if(!(this instanceof MessageInputView)){

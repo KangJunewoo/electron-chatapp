@@ -1,4 +1,4 @@
-'use strict';
+
 
 function RoomArea(document){
   if(!(this instanceof RoomArea)){

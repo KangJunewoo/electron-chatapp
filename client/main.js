@@ -1,6 +1,8 @@
-'use strict';
+
+// 클라이언트가 돌아가는 메인 js코드
+
 const electron = require('electron');
-// 원래 electron은 app BrowserWindow만 있음. 이벤트를 쓰니 ipcMain도 추가된듯.
+// app, BrowserWindow : 일렉트론 기본 내장 / ipcMain : 이벤트 처리 담당
 const {app, BrowserWindow, ipcMain} = electron;
 const url = require("url");
 const path = require('path');
@@ -15,23 +17,18 @@ const httpInstance = axios.create({
   baseURL:'http://127.0.0.1:3000'
 })
 
-// TODO : 사실 manager이 뭔지 감이 확 오지 않는다. handler도 감이 안온다.
-const handler_manager = require('./handler_manager');
-const SocketService = require('./service/SocketService');
-const SocketEvent = require('./handler_manager/event/SocketEvent');
-const TokenManager = require('./service/TokenManager');
+const SocketEvent = require('./handler_manager/event/SocketEvent'); //이벤트
+const handler_manager = require('./handler_manager'); // 핸들러
+const SocketService = require('./service/SocketService'); // 리스너
+const TokenManager = require('./service/TokenManager'); // 토큰매니저
 const tokenManager = new TokenManager();
 
-// 윈도우의 win과 소켓의 socket
-let win;
-let socket;
-let modal;
-let waitDialog;
-let listener;
-let errorListener;
-let locale;
+let win; let socket; let modal; let waitDialog; let listener; let errorListener; let locale;
 
+// 이벤트들.
+// 1. 로그인창 띄우기 (초기화면)
 const displayLoginWindow = (event, message)=>{
+  // 1-1. 옵션 설정해 win창에 담고
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
   const options = {
     width:width,
@@ -45,12 +42,16 @@ const displayLoginWindow = (event, message)=>{
     }
   };
   win = new BrowserWindow(options);
+
+  // 1-2. html파일 정해주고
   win.loadURL(url.format({
     pathname:path.join(__dirname, 'login.html'),
     protocol:'file',
     slashes:true,
   }));
   win.webContents.openDevTools();
+
+  // 1-3. 준비완료될때 띄우고 닫았을때 종료해줌.
   win.once('ready-to-show', ()=>{
     console.log('ready-to-show');
     win.show();
@@ -62,47 +63,43 @@ const displayLoginWindow = (event, message)=>{
   });
 };
 
+// 2. 회원가입창 띄우기
 const displaySignUpModal = (event, message)=>{
+  // 구조는 위와 같다.
   win.webContents.send("hide-page");
-  modal = new BrowserWindow({
+  options={
     parent:win,
     modal:true,
     show:false,
-    /**
-     * 분명 modal을 띄우고 cancel을 눌렀는데 닫혀지지가 않아서
-     * 왜!!!!!! 를 외치며 코드를 뒤적인 결과 도저히 찾을 수 없어서
-     * 개발자도구를 누르니 require is not defined라고 되어있어서
-     * 혹시 이것때문인가..? 하고 구글링을 했는데
-     * nodeIntegration 관련 내용이 나와서 아.. require은 노드 함수지 생각해서
-     * 이 옵션을 하나 더 줬더니 정상작동한다 ㅜㅜㅜ
-     * 강사는 이 옵션을 미리 줬던건가...???? 모르겠지만
-     * 나름 의미있는 삽질이었다.
-     */
-    webPreferences:{ 
-      nodeIntegration:true
-    }
-  });
+    // require is not defined 삽질의 결과
+    webPreferences:{
+      nodeIntegration:true,
+    },
+  }
+  modal = new BrowserWindow(options);
 
   modal.loadURL(url.format({
     pathname:path.join(__dirname, 'SignUpModal.html'),
     protocol:'file'
   }));
 
-  modal.on('ready-to-show', ()=>{
+  modal.once('ready-to-show', ()=>{
     modal.show();
   });
-
   modal.on('closed', ()=>{
     modal = null;
   });
 };
 
+// 3. 회원가입창 닫기
 const destroySignUpModal = (event, message)=>{
   win.webContents.send('hide-page');
   modal.close();
 };
 
+// 4. 회원가입 request 생성
 const createSignUpRequest = (event, message)=>{
+  // 드디어 백으로 요청을 보내는구나
   httpInstance.post('/users', message)
     .then((response)=>{
       event.sender.send('signUpRequest-Success', response.data);
@@ -116,6 +113,7 @@ const createSignUpRequest = (event, message)=>{
     })
 };
 
+// 5. 로딩창 띄우기
 const displayWaitDialog = (event, message)=>{
   const options = {
     width:800,
@@ -123,8 +121,7 @@ const displayWaitDialog = (event, message)=>{
     resizeable:false,
     fullscreenable:false,
     show:false,
-    // frameless window가 생성됨. 위테두리가 없어..
-    frame:false,
+    frame:false, // 위테두리 없음
     webPreferences:{
       affinity:true,
       nodeIntegration:true,
@@ -134,12 +131,13 @@ const displayWaitDialog = (event, message)=>{
   waitDialog.loadURL(url.format({
     pathname:path.join(__dirname, 'WaitDialog.html'),
     protocol:'file',
-    // 이건 무엇인고..
     slashes:true,
   }));
+
   waitDialog.once('ready-to-show', ()=>{
     win.hide();
     waitDialog.show();
+    // 띄운 다음에 작업 ㄱㄱ
     const socketURL = 'ws://127.0.0.1:3000';
     const socketOptions={
       transports:['websocket'],
@@ -150,34 +148,34 @@ const displayWaitDialog = (event, message)=>{
         token:message.data.token
       }
     };
-    // createSocket, addHandlers 둘 다 service에서 정의한 함수! 별 건 없다.
+    
+    // 소켓 만들고, 토큰 설정하고, connect 핸들러로 리스너 만들고, 혹시모를 에러리스너도 만들고.
     socket=SocketService.createSocket(io,socketURL,socketOptions);
     tokenManager.setToken(message.data.token);
-    // 첫번째인 connect onconnect 리스너만. index.js에서 달아놓은 그거!!
     listener = SocketService.addHandler(socket,waitDialog,handler_manager[SocketEvent.CONNECT]);
     errorListener = SocketService.addHandlerWithTokenManager(socket,waitDialog,handler_manager[SocketEvent.ERROR], tokenManager);
   });
   waitDialog.on('closed',()=>{
-    console.log('window closed');
     waitDialog=null;
   });
 };
 
+// 6. 로딩창 닫기
 const destroyWaitDialog = (event, message)=>{
+  // 소켓에 달아놨던 두 리스너 없애고
   socket.removeListener('connect', listener);
   socket.removeListener('error', errorListener);
   win.webContents.clearHistory();
-  win.setResizable(true);
-  win.setFullScreenable(true);
+  win.resizable=true;
+  win.fullScreenable=true;
   win.setMinimumSize(600,600);
   win.loadURL(url.format({
     pathname:path.join(__dirname, 'main.html'),
     protocol:'file',
-    // 이건 무엇인고..
     slashes:true,
   }));
   // FIXME : 여기서 ready-to-show로 안넘어가는 문제가...
-  // 야매로 해버리긴 했는데 이거 너무 찜찜하다.
+  // 야매로 해버리긴 했는데 나중에 해결해보자. 깜빡임 발생하는거 말고는 큰 차이 없다.
   SocketService.addHandlers(socket,win,handler_manager);
   SocketService.addHandler(socket, win, handler_manager[SocketEvent.CONNECT]);
   SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.RECONNECT_ATTEMPT],tokenManager);
@@ -191,30 +189,25 @@ const destroyWaitDialog = (event, message)=>{
   locale=app.getLocale();
   win.webContents.send('getProfile',{name:tokenManager.getId(),locale:locale});
   win.show();
-  // win.on('ready-to-show', ()=>{
-  //   // waitDialog.close();
+  // win.once('ready-to-show', ()=>{
   //   SocketService.addHandlers(socket,win,handler_manager);
+  //   SocketService.addHandler(socket, win, handler_manager[SocketEvent.CONNECT]);
+  //   SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.RECONNECT_ATTEMPT],tokenManager);
+  //   SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.DISCONNECT],tokenManager);
+  //   SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.TOKENREFRESHREQUIRED],tokenManager);
+  //   SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.BROADCAST_MESSAGE],tokenManager);
+  //   SocketService.addHandlerWithTokenManager(socket,win,handler_manager[SocketEvent.RECEIVE_INVITEUSER],tokenManager);
+  //   SocketService.addHandlerWithTokenManager(socket, win, handler_manager[SocketEvent.ERROR], tokenManager);
+    
   //   waitDialog.close();
+  //   locale=app.getLocale();
+  //   win.webContents.send('getProfile',{name:tokenManager.getId(),locale:locale});
   //   win.show();
   // });
 };
 
-
-// 일렉트론 앱 구동 전 준비사항들.
-// 옵션세팅, 창띄우기, 보여질url, 개발자도구, ready-to-show에서 show 넘어가기, 닫히면 종료하기
-app.on('ready', displayLoginWindow);
-ipcMain.on('displayWaitDialog', displayWaitDialog);
-ipcMain.on('destroyWaitDialog', destroyWaitDialog);
-ipcMain.on('displaySignUpModal', displaySignUpModal);
-ipcMain.on('destroySignUpModal', destroySignUpModal);
-ipcMain.on('signUpRequest', createSignUpRequest);
-
-// signInRequest 이벤트를 감지했다면 실행될 콜백함수.
-// 소켓을 만들어 url과 옵션(토큰포함)을 넣고,
-// 핸들러 추가한다음에,
-// signinrequest-success 이벤트를 아까 요청한 응답과 함께 쏴준...는듯? 에러처리도 들어가있고.
-ipcMain.on('signInRequest', (event,message)=>{
-  // 백으로 post요청을 보내면 response가 돌아오겠지.
+// 7. 로그인 요청
+const signInRequest = (event, message)=>{
   httpInstance.post('/users/login', message)
     .then((response)=>{
       tokenManager.setId(message.id);
@@ -227,7 +220,16 @@ ipcMain.on('signInRequest', (event,message)=>{
       }
       event.sender.send('signInRequest-Failed', result);
     });
-});
+}
+
+// 앱이 준비되면 로그인화면 띄우고, 각 이벤트가 준비되면, 그에 맞는 리스너를 띄운다.
+app.on('ready', displayLoginWindow);
+ipcMain.on('displayWaitDialog', displayWaitDialog);
+ipcMain.on('destroyWaitDialog', destroyWaitDialog);
+ipcMain.on('displaySignUpModal', displaySignUpModal);
+ipcMain.on('destroySignUpModal', destroySignUpModal);
+ipcMain.on('signUpRequest', createSignUpRequest);
+ipcMain.on('signInRequest', signInRequest);
 
 app.on('window-all-closed', ()=>{
   app.quit();

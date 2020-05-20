@@ -1,4 +1,4 @@
-'use strict';
+
 
 function Profile(document){
   if(!(this instanceof Profile)){

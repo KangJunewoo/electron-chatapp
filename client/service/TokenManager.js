@@ -1,4 +1,5 @@
-'use strict';
+
+// 토큰매니저 : set, get Id&Token
 function TokenManager(){
   if(!(this instanceof TokenManager)){
     throw new Error('Must be created with new key word');

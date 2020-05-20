@@ -1,5 +1,3 @@
-'use strict';
-
 function ChatArea(document){
   if(!(this instanceof ChatArea)){
     throw new Error('must be created with new keyword');

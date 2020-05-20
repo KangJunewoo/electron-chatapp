@@ -1,6 +1,7 @@
 ==== ch2_server ====
 그전까진 몰랐던 꿀팁
   'use strict'; 를 맨 앞에 쓰면 엄격 모드로 문법을 검사함.
+  -> es6부터는 모두 use strict가 알아서 적용됨.
   postman으로 편하게 post요청 보낼 수 있음.
 
 app.js

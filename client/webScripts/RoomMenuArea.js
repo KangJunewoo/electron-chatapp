@@ -1,4 +1,4 @@
-'use strict';
+
 
 function RoomMenuArea(document){
   if(!(this instanceof RoomMenuArea)){

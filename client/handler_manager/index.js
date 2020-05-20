@@ -1,4 +1,4 @@
-'use strict';
+
 
 const SocketEvent = require('./event/SocketEvent');
 const dict=[];

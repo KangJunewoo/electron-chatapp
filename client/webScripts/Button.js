@@ -1,9 +1,6 @@
-'use strict';
-
 function Button(element){
-  // TODO  instanceof가 뭘까
   if(!(this instanceof Button)){
-    throw Error('must be created with new keyboard');
+    throw Error('must be created with new keyword');
   }
   this.view= element;
   this.eventListener=undefined;

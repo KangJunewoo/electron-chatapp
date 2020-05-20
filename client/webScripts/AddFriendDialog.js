@@ -1,9 +1,8 @@
-'use strict';
-
 function AddFriendDialog(document){
   if(!(this instanceof AddFriendDialog)){
     throw new Error('must be created with new keyword');
   }
+  // dom 접근
   const Button=require('./Button');
   this.view=document.getElementById('addFriendDialogWrapper');
   this.friendIdInput=document.getElementById('input-friendId');
@@ -18,6 +17,7 @@ AddFriendDialog.prototype.show=function(){
   this.view.classList.toggle("show");
   return Promise.resolve();
 };
+
 AddFriendDialog.prototype.loaderPlay=function(){
   this.elementLoader.classList.toggle('show');
 };
@@ -27,6 +27,7 @@ AddFriendDialog.prototype.displayResult=function(){
 AddFriendDialog.prototype.search = function(){
   this.searchUserResult.classList.toggle('dismiss');
 }
+// search+loaderPlay+displayResult
 AddFriendDialog.prototype.play = function(){
   this.search();
   this.loaderPlay();

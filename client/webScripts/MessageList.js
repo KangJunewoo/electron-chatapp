@@ -1,4 +1,4 @@
-'use strict';
+
 
 function MessageList(document){
   if(!(this instanceof MessageList)){

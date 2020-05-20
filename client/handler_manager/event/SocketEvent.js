@@ -1,4 +1,4 @@
-'use strict';
+
 
 /**
  * default event name(connection info)

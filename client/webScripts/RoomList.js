@@ -1,4 +1,4 @@
-'use strict';
+
 
 function RoomList(document){
   if(!(this instanceof RoomList)){

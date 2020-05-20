@@ -1,4 +1,4 @@
-'use strict';
+
 
 function ListFriendRequestDialog(document){
   if(!(this instanceof ListFriendRequestDialog)){

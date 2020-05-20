@@ -1,5 +1,3 @@
-'use strict';
-
 function CreateRoomDialog(document){
   if(!(this instanceof CreateRoomDialog)){
     throw new Error('must be created with new keyword');

@@ -1,6 +1,3 @@
-// TODO : 진짜 효과가 있을까?
-'use strict';
-
 function DialogFactory(document){
   if(!(this instanceof DialogFactory)){
     throw new Error('must be created with new keyword');

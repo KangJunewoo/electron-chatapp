@@ -1,4 +1,4 @@
-'use strict';
+
 
 function FriendMenuDialog(document){
   if(!(this instanceof FriendMenuDialog)){
