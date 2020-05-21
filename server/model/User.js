@@ -6,6 +6,7 @@ let UserSchema = new Schema({
   password:{type:String,required:true},
   token:String,
   agoToken:String,
+  socketId:String,
   friends:[{type:Schema.Types.ObjectId, ref:'User'}],
   friendReceiveRequests:[{type:Schema.Types.ObjectId, ref:'User'}],
   friendRequests:[{type:Schema.Types.ObjectId, ref:'User'}],

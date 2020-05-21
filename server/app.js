@@ -15,6 +15,7 @@ const mongoose = require("mongoose");
 const Initializer = require('./init/initializer');
 const User = require('./model/User');
 const jsonwebtoken = require('jsonwebtoken');
+const SocketRoutes = require('./socketRoutes');
 const app = express();
 Initializer.InitMongoDB(process.env, mongoose);
 // express 앱에 io를 쓰겠다.
@@ -50,28 +51,8 @@ app.use(function(req, res, next) {
  * io는 왜 createError 다음에 올까..
  */
 
-io.use((socket,next)=>{
-  const token = socket.handshake.query.token;
-  const cert = 'secret';
-  console.log(`token is ${token}`);
-  jsonwebtoken.verify(token,cert,(err,decodedUser)=>{
-    if(err){
-      err.name==='TokenExpiredError'?next(new Error('tokenrefresh')):next(new Error('unauthorized'));
-      return;
-    }
-    User.findOne({id:decodedUser.id})
-      .then((user)=>{
-        if(!user){
-          return next(new Error('unauthorized'));
-        }
-        user.token===token?next():next(new Error('unauthorized'));
-        return;
-      })
-      .catch((error)=>{
-        return next(new Error('unauthorized'));
-      });
-  });
-});
+// handshake middleware
+io.use(SocketRoutes.handshake);
 
 /**
  * io가 연결되면
@@ -79,12 +60,13 @@ io.use((socket,next)=>{
  * 연결끊어지면 에러 출력한다.
  */
 io.on('connection', (socket)=>{
-  socket.on('hello', (message)=>{
-    console.log(message);
+  SocketRoutes.functions.TokenRefreshEmmit(socket);
+  SocketRoutes.functions.SetSocketId(socket).then((user)=>{
+    SocketRoutes.functions.JoinRooms(user,socket);
   });
-  socket.on('disconnect',(err)=>{
-    console.log(err);
-  });
+  SocketRoutes.createRoom(socket, SocketRoutes.event.createRoom);
+  SocketRoutes.hello(socket, SocketRoutes.event.hello);
+  SocketRoutes.disconnect(socket, SocketRoutes.event.disconnect);
 });
 
 

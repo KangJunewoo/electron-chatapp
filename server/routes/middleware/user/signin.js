@@ -1,3 +1,4 @@
+//signup 아닌가??
 exports.createUser = (req,res,next)=>{
   const UserModel = require('../../../model/User');
   const bcrypt = require('bcrypt');
