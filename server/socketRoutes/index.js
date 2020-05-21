@@ -4,3 +4,7 @@ exports.hello = require('./hello');
 exports.disconnect = require('./disconnect');
 exports.functions = require('./functions');
 exports.createRoom = require('./createRoom');
+exports.searchUser = require('./searchUser');
+exports.roomListSearch = require('./roomListSearch');
+exports.InviteUser=require('./InviteUser');
+exports.leaveRoom = require('./leaveRoom');

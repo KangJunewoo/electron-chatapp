@@ -67,6 +67,10 @@ io.on('connection', (socket)=>{
   SocketRoutes.createRoom(socket, SocketRoutes.event.createRoom);
   SocketRoutes.hello(socket, SocketRoutes.event.hello);
   SocketRoutes.disconnect(socket, SocketRoutes.event.disconnect);
+  SocketRoutes.searchUser(socket, SocketRoutes.event.searchUser);
+  SocketRoutes.roomListSearch(socket,SocketRoutes.event.roomListSearch);
+  SocketRoutes.InviteUser(socket,io,SocketRoutes.event.InviteUser);
+  SocketRoutes.leaveRoom(socket, SocketRoutes.event.leaveRoom);
 });
 
 
