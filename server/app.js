@@ -1,6 +1,6 @@
-
-
 const createError = require('http-errors');
+// TODO : mongoose를 express보다 먼저 선언해주는게 좋다. schema 에러 방지를 위함.
+const mongoose = require("mongoose");
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -11,9 +11,10 @@ const io = require('socket.io')();
 const headerPrinter = require('./headerPrinter');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const mongoose = require("mongoose");
 const Initializer = require('./init/initializer');
 const User = require('./model/User');
+// TODO : 안쓰는 DB라도.. 일단은 선언을 하는게.. 좋은갑다.. 이거 안해주면 에러뜸.
+const Room = require('./model/Room');
 const jsonwebtoken = require('jsonwebtoken');
 const SocketRoutes = require('./socketRoutes');
 const app = express();
@@ -71,10 +72,10 @@ io.on('connection', (socket)=>{
   SocketRoutes.roomListSearch(socket,SocketRoutes.event.roomListSearch);
   SocketRoutes.InviteUser(socket,io,SocketRoutes.event.InviteUser);
   SocketRoutes.leaveRoom(socket, SocketRoutes.event.leaveRoom);
-  SocketRoutes.searchFriend(socket, socketRoutes.event.searchFriend);
+  SocketRoutes.searchFriend(socket, SocketRoutes.event.searchFriend);
   SocketRoutes.requestFriendShipUser(socket, SocketRoutes.event.requestFriendShipUser);
   SocketRoutes.acceptFriendShipRequest(socket,SocketRoutes.event.acceptFriendShipRequest);
-  SocketRoutes.denyFriendShipRequest(socket.SocketRoutes,event.denyFriendShipRequest);
+  SocketRoutes.denyFriendShipRequest(socket,SocketRoutes.event.denyFriendShipRequest);
   SocketRoutes.removeFriendShipRequest(socket,SocketRoutes.event.removeFriendShipRequest);
   SocketRoutes.messageSend(io, socket, SocketRoutes.event.messageSend);
   SocketRoutes.messageLoad(socket,SocketRoutes.event.messageLoad);

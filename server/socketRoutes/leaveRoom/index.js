@@ -11,7 +11,8 @@ module.exports=(socket, event)=>{
       .then((decodedUser)=>{
         return findRoom(decodedUser, message);
       })
-      .then((user)=>{
+      .then((result)=>{
+        // FIXME : 여기 좀 다르군.
         return pullRoomToUser(result);
       })
       .then((result)=>{

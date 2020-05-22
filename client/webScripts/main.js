@@ -15,10 +15,22 @@
   const RoomMenuArea = require('./webScripts/RoomMenuArea');
   const RoomArea=require('./webScripts/RoomArea');
   const ChatArea=require('./webScripts/ChatArea');
+  const MainEvent = require('./mainProcess/MainEvent');
   const dialogFactory=new DialogFactory(document);
   const roomMenuArea=  new RoomMenuArea(document);
   const roomArea=new RoomArea(document);
   const chatArea=new ChatArea(document);
+  let locale = undefined;
+  ipcRenderer.send(MainEvent.roomListSearch,{});
+  ipcRenderer.send(MainEvent.getProfile,{});
+  //FIXME : getProfile 기능이 왜 안먹을까?
+  ipcRenderer.on(MainEvent.getProfile, (event, message)=>{
+    console.log(message);
+    roomArea.Profile.setName(message.name);
+    locale=message.locale;
+    chatArea.MessageList.ItemFactory.setLocale(locale);
+    console.log(locale);
+  });
   ipcRenderer.on(SocketEvent.HELLO, (event, message)=>{
     console.log(message);
   });

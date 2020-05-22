@@ -1,4 +1,4 @@
-(socket,next)=>{
+module.exports = (socket,next)=>{
   const User = require('../../model/User');
   const jsonwebtoken=require('jsonwebtoken');
   const token = socket.handshake.query.token;

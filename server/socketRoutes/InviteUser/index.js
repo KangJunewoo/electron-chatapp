@@ -1,7 +1,7 @@
 module.exports=(socket, io, event)=>{
   const Verifier = require('../../util/Verifier');
   const JWTVerifier = new Verifier();
-  const findTargetUser = require('./middleware/findUser');
+  const findTargetUser = require('./middleware/findTargetUser');
   const pushUserToRoom = require('./middleware/pushUserToRoom');
   const sendMessageToTargetUser = require('./middleware/sendMessageToTargetUser');
   const sendSuccessAck = require('./middleware/sendSuccessAck');

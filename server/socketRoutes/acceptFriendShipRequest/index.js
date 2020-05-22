@@ -9,7 +9,7 @@ module.exports=(socket, event)=>{
   socket.on(event, (message,ack)=>{
     JWTVerifier.verify(socket, message.token)
       .then((decodedUser)=>{
-        return updateReceiveRequest(decodedUser);
+        return updateReceiveRequest(decodedUser, message);
       })
       .then((result)=>{
         return updateFriendRequest(result,message);

@@ -1,4 +1,4 @@
-module.exports=(io, socket, event)=>{
+module.exports=(socket, event)=>{
   const Verifier = require('../../util/Verifier');
   const JWTVerifier = new Verifier();
   const findRoom = require('./middleware/findRoom');
