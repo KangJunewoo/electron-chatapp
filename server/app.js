@@ -71,6 +71,11 @@ io.on('connection', (socket)=>{
   SocketRoutes.roomListSearch(socket,SocketRoutes.event.roomListSearch);
   SocketRoutes.InviteUser(socket,io,SocketRoutes.event.InviteUser);
   SocketRoutes.leaveRoom(socket, SocketRoutes.event.leaveRoom);
+  SocketRoutes.searchFriend(socket, socketRoutes.event.searchFriend);
+  SocketRoutes.requestFriendShipUser(socket, SocketRoutes.event.requestFriendShipUser);
+  SocketRoutes.acceptFriendShipRequest(socket,SocketRoutes.event.acceptFriendShipRequest);
+  SocketRoutes.denyFriendShipRequest(socket.SocketRoutes,event.denyFriendShipRequest);
+  SocketRoutes.removeFriendShipRequest(socket,SocketRoutes.event.removeFriendShipRequest);
 });
 
 
