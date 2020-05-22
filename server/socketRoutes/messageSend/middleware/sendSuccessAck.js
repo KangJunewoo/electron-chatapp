@@ -1,5 +1,5 @@
-module.exports = (messageObject,message,ack)=>{
-  message.result = messageObject;
+module.exports = (user,message,ack)=>{
+  message.result = user;
   message.isSuccess=true;
   message.Error = undefined;
   ack(message);

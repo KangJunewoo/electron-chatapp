@@ -13,3 +13,5 @@ exports.requestFriendShipUser=require('./requestFriendShipUser');
 exports.acceptFriendShipRequest=require('./acceptFriendShipRequest');
 exports.denyFriendShipRequest=require('./denyFriendShipRequest');
 exports.removeFriendShipRequest=require('./removeFriendShipRequest');
+exports.messageSend=require('./messageSend');
+exports.messageLoad=require('./messageLoad');
