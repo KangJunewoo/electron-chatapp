@@ -13,7 +13,7 @@ function MessageItemFactory(document){
 
 MessageItemFactory.prototype.setLocale=function(locale){
   this.locale=locale;
-  this.monent.locale(locale);
+  this.moment.locale(locale);
   return this.locale;
 }
 

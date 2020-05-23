@@ -13,3 +13,4 @@ exports.removeFriendShipRequest = 'removeFriendShipRequest';
 exports.searchFriend = 'searchFriend';
 exports.joinRoomRequest='joinRoomRequest';
 exports.getProfile='getProfile';
+exports.tokenRefreshing='tokenRefreshing';

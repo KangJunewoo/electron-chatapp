@@ -5,7 +5,7 @@ function MessageList(document){
     throw new Error('must be created with new keyword');
   }
   const MessageItemFactory = require('./MessageItemFactory');
-  this.item=document.getElementById('messageList');
+  this.items=document.getElementById('messageList');
   this.ItemFactory=new MessageItemFactory(document);
   this.renderTask=[];
   this.TaskCount=0;

@@ -22,6 +22,7 @@ const handler_manager = require('./handler_manager'); // 핸들러
 const SocketService = require('./service/SocketService'); // 리스너
 const TokenManager = require('./service/TokenManager'); // 토큰매니저
 const tokenManager = new TokenManager();
+const MainWindowActions = require('./mainProcess/MainWindowActions');
 
 let win; let socket; let modal; let waitDialog; let listener; let errorListener; let locale;
 
@@ -154,6 +155,7 @@ const displayWaitDialog = (event, message)=>{
     tokenManager.setToken(message.data.token);
     listener = SocketService.addHandler(socket,waitDialog,handler_manager[SocketEvent.CONNECT]);
     errorListener = SocketService.addHandlerWithTokenManager(socket,waitDialog,handler_manager[SocketEvent.ERROR], tokenManager);
+    MainWindowActions(ipcMain,socket,tokenManager);
   });
   waitDialog.on('closed',()=>{
     waitDialog=null;

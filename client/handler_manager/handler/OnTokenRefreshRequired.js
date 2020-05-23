@@ -8,6 +8,7 @@ module.exports = (socket,win,TokenManager)=>{
     const id = TokenManager.getId();
     return httpInstance.get('/users/token?id='+id,{headers:{'x-access-token':token}});
   };
+  win.webContents.send('tokenRefreshing');
   tokenRequest()
     .then((response)=>{
       TokenManager.setToken(response.data.token);

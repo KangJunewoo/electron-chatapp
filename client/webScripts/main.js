@@ -21,8 +21,42 @@
   const roomArea=new RoomArea(document);
   const chatArea=new ChatArea(document);
   let locale = undefined;
+  const successString='-Success';
+  const failureString='-Failure';
   ipcRenderer.send(MainEvent.roomListSearch,{});
   ipcRenderer.send(MainEvent.getProfile,{});
+  ipcRenderer.on(MainEvent.roomListSearch+successString,(event,message)=>{
+    console.log(message.result);
+    // FIXME : room이 비었기 때문에 foreach 작동 안됨.
+    message.result.forEach((room)=>{
+      roomArea.RoomList.addItem(room);
+    });
+  });
+  ipcRenderer.on(MainEvent.roomListSearch+successString,(event,message)=>{
+    alert('방리스트 조회 실패. ctrl + r로 새로고침해주세요');
+  });
+  roomArea.RoomList.setSelectListener((event)=>{
+    const viewAnimation = ()=>{
+      return new Promise((resolve, reject)=>{
+        roomArea.RoomList.setCurrentItem(event.target)===true?resolve:reject;
+      })
+    };
+    viewAnimation()
+      .then(()=>{
+
+      })
+      .catch(()=>{
+      });
+  });
+  ipcRenderer.on(MainEvent.tokenRefreshing, (event)=>{
+    dialogFactory.getDialog('refreshTokenDialog').show();
+  });
+  ipcRenderer.on(MainEvent.tokenRefreshing+successString, (event)=>{
+    dialogFactory.getDialog('refreshTokenDialog').show();
+  });
+  ipcRenderer.on(MainEvent.tokenRefreshing+failureString, (event)=>{
+    dialogFactory.getDialog('refreshTokenDialog').show();
+  });
   //FIXME : getProfile 기능이 왜 안먹을까?
   ipcRenderer.on(MainEvent.getProfile, (event, message)=>{
     console.log(message);
@@ -35,13 +69,39 @@
     console.log(message);
   });
   dialogFactory.getDialog('inviteRoomDialog').confirmButton.setEventListener(()=>{
-    dialogFactory.getDialog('inviteRoomDialog').show();
+    const userId = dialogFactory.getDialog('inviteRoomDialog').getUserId();
+    const targetRoom = roomArea.RoomList.getCurrentItem().id;
+    ipcRenderer.send(MainEvent.InviteUser, {id:userId, roomId:targetRoom});
   });
+  ipcRenderer.on(MainEvent.InviteUser+failureString, (event,message)=>{
+    console.log(message);
+    dialogFactory.getDialog('inviteRoomDialog').show();
+    alert(`${message.result[0].id} 초대 성공`);
+    
+  })
+  ipcRenderer.on(MainEvent.InviteUser+failureString, (event,message)=>{
+    console.log(message);
+    alert(`초대 실패`);
+  })
   dialogFactory.getDialog('inviteRoomDialog').cancelButton.setEventListener(()=>{
     dialogFactory.getDialog('inviteRoomDialog').show();
   });
   dialogFactory.getDialog('leaveRoomDialog').confirmButton.setEventListener(()=>{
+    const currentRoom = roomArea.RoomList.getCurrentItem();
+    ipcRenderer.send(MainEvent.leaveRoom, {_id:currentRoom.id});
+    
+    chatArea.MessageList.clearItems();
     dialogFactory.getDialog('leaveRoomDialog').show();
+  });
+  ipcRenderer.on(MainEvent.leaveRoom+successString,(event,message)=>{
+    console.log(message);
+    const currentRoom = roomArea.RoomList.getCurrentItem();
+    roomArea.RoomList.removeItem(currentRoom);
+    roomArea.RoomList.clearCurrentItem();
+    alert(message.result.room.roomName+'나가기 성공');
+  });
+  ipcRenderer.on(MainEvent.leaveRoom+successString,(event,message)=>{
+    alert('나가기 실패');
   });
   dialogFactory.getDialog('leaveRoomDialog').cancelButton.setEventListener(()=>{
     dialogFactory.getDialog('leaveRoomDialog').show();
@@ -72,15 +132,20 @@
       }
     }
   });
+  // FIXME : createroom 안됨
   dialogFactory.getDialog('createRoomDialog').confirmButton.setEventListener(()=>{
-    const room = {
-      _id:'n213n4n1324',
-      roomName:undefined
-    };
-    room.roomName=dialogFactory.getDialog('createRoomDialog').getRoomName();
-    roomArea.RoomList.addItem(room);
-    dialogFactory.getDialog('createRoomDialog').show();
+    ipcRenderer.send(MainEvent.createRoom,{roomName:dialogFactory.getDialog('createRoomDialog').getRoomName()});    
   });
+  ipcRenderer.on(MainEvent.createRoom+successString,(event,message)=>{
+    console.log(message);
+    roomArea.RoomList.addItem(message.result.room)
+      .then(roomArea.RoomList.setCurrentItem.bind(roomArea.RoomList))
+      .then(chatArea.MessageList.clearItems.bind(chatArea.MessageList))
+      .then(dialogFactory.getDialog('createRoomDialog').show.bind(dialogFactory.getDialog('createRoomDialog')))
+      .catch((error)=>{
+        console.log(error);
+      });
+  })
   dialogFactory.getDialog('createRoomDialog').cancelButton.setEventListener(()=>{
     dialogFactory.getDialog('createRoomDialog').show();
   });
