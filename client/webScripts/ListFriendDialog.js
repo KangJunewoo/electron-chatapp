@@ -13,8 +13,10 @@ function ListFriendDialog(document){
   this.eventListener = undefined;
 }
 
-ListFriendDialog.prototype.show=function(){
+ListFriendDialog.prototype.show=function(ipcRenderer){
   this.view.classList.toggle("show");
+  const message = {};
+  ipcRenderer.send('searchFriend', message);
   return Promise.resolve();
 };
 

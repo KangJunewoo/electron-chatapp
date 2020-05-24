@@ -7,6 +7,7 @@ function AddFriendDialog(document){
   this.view=document.getElementById('addFriendDialogWrapper');
   this.friendIdInput=document.getElementById('input-friendId');
   this.searchUserResult = document.getElementById('searchUserResult');
+  this.searchUserButton = new Button(document.getElementById('searchUserButton'));
   this.elementLoader=document.getElementById('addElementLoader');
   this.confirmButton=new Button(document.getElementById('addFriendConfirmButton'));
   this.cancelButton=new Button(document.getElementById('addFriendCancelButton'));
@@ -31,8 +32,13 @@ AddFriendDialog.prototype.search = function(){
 AddFriendDialog.prototype.play = function(){
   this.search();
   this.loaderPlay();
-  this.displayResult();
+  
 }
+AddFriendDialog.prototype.finish=function(){
+  this.search();
+  this.loaderPlay();
+  this.displayResult();
+};
 AddFriendDialog.prototype.getUserId = function(){
   return this.friendIdInput.value;
 }

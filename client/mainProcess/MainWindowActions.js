@@ -24,4 +24,22 @@ module.exports=(ipcMain,socket,TokenManager)=>{
   ipcMain.on(MainEvent.getProfile,(event,message)=>{
     getProfile(MainEvent.getProfile,TokenManager,event,message);
   });
+  ipcMain.on(MainEvent.searchFriend, (event,message)=>{
+    emit(MainEvent.searchFriend,socket,TokenManager,event,message);
+  });
+  ipcMain.on(MainEvent.requestFriendShipUser, (event,message)=>{
+    emit(MainEvent.requestFriendShipUser, socket. TokenManager, event, message);
+  })
+  ipcMain.on(MainEvent.acceptFriendShipRequest, (event,message)=>{
+    emit(MainEvent.acceptFriendShipRequest,socket,TokenManager,event,message);
+  });
+  ipcMain.on(MainEvent.denyFriendShipRequest, (event,message)=>{
+    emit(MainEvent.denyFriendShipRequest,socket,TokenManager,event,message);
+  });
+  ipcMain.on(MainEvent.removeFriendShipRequest, (event,message)=>{
+    emit(MainEvent.removeFriendShipRequest,socket, TokenManager, event,message);
+  });
+  ipcMain.on(MainEvent.searchFriendRequest, (event,message)=>{
+    emit(MainEvent.searchFriendRequest,socket, TokenManager, event,message);
+  });
 };

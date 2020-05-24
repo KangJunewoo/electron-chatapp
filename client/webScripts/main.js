@@ -110,17 +110,125 @@
     dialogFactory.getDialog('friendMenuDialog').show();
   });
   dialogFactory.getDialog('addFriendDialog').confirmButton.setEventListener(()=>{
+    const userId=dialogFactory.getDialog('addFriendDialog').getUserId();
+    const message={
+      id:userId
+    };
+    ipcRenderer.send(MainEvent.requestFriendShipUser, message);
     dialogFactory.getDialog('addFriendDialog').show();
+  });
+  ipcRenderer.on(MainEvent.requestFriendShipUser+successString,(event,message)=>{
+    dialogFactory.getDialog('addFriendDialog').show();
+    alert(`${message.id}에게 친구 신청 성공`);
+  });
+  ipcRenderer.on(MainEvent.requestFriendShipUser+failureString,(event,message)=>{
+    alert('친구 신청 실패');
+  });
+  dialogFactory.getDialog('addFriendDialog').searchUserButton.setEventListener(()=>{
+    const userId = dialogFactory.getDialog('addFriendDialog').getUserId();
+    const message = {
+      id:userId,
+    };
+    dialogFactory.getDialog('addFriendDialog').play();
+    ipcRenderer.send(MainEvent.searchUser,message);
+  });
+  ipcRenderer.on(MainEvent.searchUser+successString,(event,message)=>{
+    console.log(message);
+    dialogFactory.getDialog('addFriendDialog').setSearchResult(message.id);
+    dialogFactory.getDialog('addFriendDialog').finish();
+  })
+  ipcRenderer.on(MainEvent.searchUser+failureString,(event,message)=>{
+    console.log(message);
+    dialogFactory.getDialog('addFriendDialog').setSearchResult(dialogFactory.getDialog('addFriendDialog').defaultValue);
+    dialogFactory.getDialog('addFriendDialog').finish();
   })
   dialogFactory.getDialog('addFriendDialog').cancelButton.setEventListener(()=>{
     dialogFactory.getDialog('addFriendDialog').show();
   })
   dialogFactory.getDialog('listFriendDialog').CloseButton.setEventListener(()=>{
-    dialogFactory.getDialog('listFriendDialog').show();
+    dialogFactory.getDialog('listFriendDialog').dismiss();
   })
+  dialogFactory.getDialog('listFriendDialog').setSelectListener((event)=>{
+    if(event.target.tagName==='BUTTON'){
+      const message={
+        _id:event.target.parentNode.id
+      };
+      dialogFactory.getDialog('listFriendDialog').executeLoader(message._id)
+        .then(()=>{
+          ipcRenderer.send(MainEvent.removeFriendShipRequest,message);
+        })
+        .catch((error)=>{
+          console.log(error);
+        })
+    }
+  });
+  ipcRenderer.on(MainEvent.removeFriendShipRequest+successString,(event,message)=>{
+    console.log(message);
+    dialogFactory.getDialog('listFriendDialog').removeItem(message._id);
+  })
+  ipcRenderer.on(MainEvent.removeFriendShipRequest+failureString,(event,message)=>{
+    console.log(message);
+    dialogFactory.getDialog('listFriendDialog').executeLoader(message._id);
+    alert('친구 삭제 실패')
+  })
+  
+
+  ipcRenderer.on(MainEvent.searchFriend + successString, (event,message)=>{
+    console.log(message);
+    message.result.friends.forEach((item)=>{
+      dialogFactory.getDialog('listFriendDialog').addItem(item);
+    })
+    // alert('친구리스트 조회 성공');
+  });
+  ipcRenderer.on(MainEvent.searchFriend + failureString, (event,message)=>{
+    console.log(message);
+    alert('친구리스트 조회 실패');
+    
+  });
   dialogFactory.getDialog('listFriendRequestDialog').CloseButton.setEventListener(()=>{
-    dialogFactory.getDialog('listFriendRequestDialog').show();
+    dialogFactory.getDialog('listFriendRequestDialog').dismiss();
+  });
+  
+  dialogFactory.getDialog('listFriendRequestDialog').setSelectListener((event)=>{
+    if(event.target.tagName==='BUTTON'){
+      const message={
+        _id:event.target.parentNode.id
+      };
+      dialogFactory.getDialog('listFriendRequestDialog').executeLoader(message._id)
+        .then(()=>{
+          event.target.value==='1'?ipcRenderer.send(MainEvent.acceptFriendShipRequest, message):ipcRenderer.send(MainEvent.denyFriendShipRequest,message);
+        })
+        .catch((error)=>{
+          console.log(error);
+        })
+    }
   })
+  
+  ipcRenderer.on(MainEvent.searchFriendRequest+successString,(event,message)=>{
+    dialogFactory.getDialog('listFriendRequestDialog').removeItem(message._id);
+    alert('친구 수락 성공');
+  });
+  ipcRenderer.on(MainEvent.searchFriendRequest+failureString,(event,message)=>{
+    alert('친구 수락 실패');
+  });
+  ipcRenderer.on(MainEvent.denyFriendRequest+successString,(event,message)=>{
+    dialogFactory.getDialog('listFriendRequestDialog').removeItem(message._id);
+    alert('친구 거절 성공');
+  });
+  ipcRenderer.on(MainEvent.denyFriendRequest+failureString,(event,message)=>{
+    alert('친구 거절 실패');
+  });
+  ipcRenderer.on(MainEvent.searchFriendRequest+successString,(event,message)=>{
+    console.log(message);
+    message.result.friends.forEach((item)=>{
+      dialogFactory.getDialog('listFriendRequestDialog').addItem(item);
+    })
+    // alert('친구요청 리스트 조회 성공')
+  });
+  ipcRenderer.on(MainEvent.searchFriendRequest+failureString,(event,message)=>{
+    console.log(message);
+    alert('친구요청 리스트 조회 실패');
+  });
   dialogFactory.getDialog('friendMenuDialog').setSelectListener(()=>{
     if(event.target.tagName==='LI'){
       if(event.target.id==='addFriend'){

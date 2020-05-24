@@ -15,6 +15,7 @@ const Initializer = require('./init/initializer');
 const User = require('./model/User');
 // TODO : 안쓰는 DB라도.. 일단은 선언을 하는게.. 좋은갑다.. 이거 안해주면 에러뜸.
 const Room = require('./model/Room');
+const Message = require('./model/Message');
 const jsonwebtoken = require('jsonwebtoken');
 const SocketRoutes = require('./socketRoutes');
 const app = express();
@@ -79,6 +80,7 @@ io.on('connection', (socket)=>{
   SocketRoutes.removeFriendShipRequest(socket,SocketRoutes.event.removeFriendShipRequest);
   SocketRoutes.messageSend(io, socket, SocketRoutes.event.messageSend);
   SocketRoutes.messageLoad(socket,SocketRoutes.event.messageLoad);
+  SocketRoutes.searchFriendRequest(socket, SocketRoutes.event.searchFriendRequest);
 });
 
 

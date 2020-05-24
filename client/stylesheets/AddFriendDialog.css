@@ -75,7 +75,7 @@
   display:inline-block;
 
 }
-#searchUseResult.dismiss.show{
+#searchUseResult.dismiss{
   display:none;
 }
 #searchUserResult.show{
